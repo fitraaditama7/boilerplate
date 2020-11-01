@@ -82,6 +82,6 @@ func (r *Redis) UpdateUser(ctx context.Context, user *entity.User, id string) (*
 	return r.repo.UpdateUser(ctx, user, id)
 }
 
-func (r *Redis) DeleteUser(ctx context.Context, id string) error {
-	return r.repo.DeleteUser(ctx, id)
+func (r *Redis) DeleteUser(ctx context.Context, id string, userID string) error {
+	return r.repo.DeleteUser(ctx, id, userID)
 }
