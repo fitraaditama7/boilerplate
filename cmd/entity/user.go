@@ -11,7 +11,7 @@ type User struct {
 	FirstName   string     `json:"first_name"`
 	LastName    string     `json:"last_name"`
 	PhoneNumber string     `json:"phone_number"`
-	Salt        string     `json:"-"`
+	Salt        *string    `json:"-"`
 	RoleID      string     `json:"role_id"`
 	CreatedAt   time.Time  `json:"created_at"`
 	CreatedBy   string     `json:"created_by,omitempty"`

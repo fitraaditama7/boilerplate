@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"arka/cmd/config"
-	dashboard "arka/cmd/delivery/v1/dashboard/auth"
+	dashboard "arka/cmd/delivery/http/v1/dashboard/auth"
 	"arka/cmd/repositories"
 	"arka/cmd/repositories/user/mysql"
 	"arka/cmd/repositories/user/redis"

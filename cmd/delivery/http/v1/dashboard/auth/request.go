@@ -1,4 +1,4 @@
-package dashboard
+package http
 
 type loginRequest struct {
 	Email       string `json:"email,omitempty"`

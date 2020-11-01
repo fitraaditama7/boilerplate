@@ -27,6 +27,14 @@ func (r *Redis) ListUser(ctx context.Context, page, limit int64) ([]*entity.User
 	return r.repo.ListUser(ctx, page, limit)
 }
 
+func (r *Redis) GetUserByID(ctx context.Context, id string) (*entity.User, error) {
+	return r.repo.GetUserByID(ctx, id)
+}
+
+func (r *Redis) GetUserRoleID(ctx context.Context, roleID string) ([]*entity.User, error) {
+	return r.repo.GetUserRoleID(ctx, roleID)
+}
+
 func (r *Redis) GetUserByEmailOrPhone(ctx context.Context, data string) (*entity.User, error) {
 	var key = fmt.Sprintf("%s:%s:%s", r.prefix, r.module, data)
 	var user = new(entity.User)
@@ -64,4 +72,16 @@ func (r *Redis) GetUserByEmailOrPhone(ctx context.Context, data string) (*entity
 		return nil, err
 	}
 	return user, err
+}
+
+func (r *Redis) InsertUser(ctx context.Context, user *entity.User) (*entity.User, error) {
+	return r.repo.InsertUser(ctx, user)
+}
+
+func (r *Redis) UpdateUser(ctx context.Context, user *entity.User, id string) (*entity.User, error) {
+	return r.repo.UpdateUser(ctx, user, id)
+}
+
+func (r *Redis) DeleteUser(ctx context.Context, id string) error {
+	return r.repo.DeleteUser(ctx, id)
 }

@@ -1,4 +1,4 @@
-package dashboard
+package http
 
 import (
 	"arka/cmd/lib/authentication"
