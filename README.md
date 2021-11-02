@@ -8,8 +8,8 @@ CRUD API Boilerplate
 
 ### Prerequisites
 - Golang(>=1.11) - Download and Install [Golang](https://golang.org/)
-- Swaggo - Download and Install [Swaggo](https://github.com/swaggo/swag)
-- Mockery - Download and Install [Mockery](https://github.com/vektra/mockery)
+- Redis - Download and Install [Redis](https://redis.io/download)
+- MySQL - Download and Install [MySQL](https://www.apachefriends.org/download.html)
 
 ### How To Use
 - Download Dependency Golang
@@ -19,32 +19,9 @@ This command is useful for download dependency golang
     $ make download
 ```
 
-- Running Unit Test
-
-This command is useful for running unit testing golang
+This command is useful for migrate dummy data
 ```
-    $ make unittest
-```
-
-- Running Test
-
-This command is useful for running testing golang
-```
-    $ make test
-```
-
-- Running Prepare Linter
-
-This command is useful for prepare linter golang
-``` 
-    $ make lint-prepare
-```
-
-- Running Linter
-
-This command is useful for check quality of golang code
-```
-    $ make lint
+    $ make migrate
 ```
 
 - Running Server
