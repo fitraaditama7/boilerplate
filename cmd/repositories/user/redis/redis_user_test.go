@@ -54,7 +54,7 @@ func TestListUser(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		mockUserRepo.On("ListUser", mock.Anything, mock.AnythingOfType("int64"), mock.AnythingOfType("int64")).Return(userPayload, nil).Once()
 
-		userResponse, err := redis.ListMahasiswa(context.TODO(), page, limit)
+		userResponse, err := redis.ListUser(context.TODO(), page, limit)
 		require.NoError(t, err)
 		require.NotNil(t, userResponse)
 		mockUserRepo.AssertExpectations(t)

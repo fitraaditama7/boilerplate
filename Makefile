@@ -11,6 +11,9 @@ test:
 unittest: 
 	@go test -short  ./...
 
+migrate: 
+	@go run ./migrations/migrate.go
+
 run: 
 	@go run main.go
 

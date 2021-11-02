@@ -304,7 +304,7 @@ func (m *MySQL) UpdateUser(ctx context.Context, user *entity.User, id string) (*
 func (m *MySQL) DeleteUser(ctx context.Context, id string, userID string) error {
 	query := `UPDATE tm_user SET
 		deleted_at = NOW(),
-		deleted_by = ?,
+		deleted_by = ?
 	WHERE id  = ?
 	`
 
