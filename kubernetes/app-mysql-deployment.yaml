@@ -1,0 +1,26 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: boilerplate-app-mysql
+  labels:
+    app: boilerplate-app-mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: boilerplate-app-mysql
+  template:
+    metadata:
+      labels:
+        app: boilerplate-app-mysql
+    spec:
+      containers:
+        - name: boilerplate-app-mysql 
+          image: abrohah7/boilerplate:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 4000
+          envFrom:
+            - secretRef:
+                name: mysql-secret
