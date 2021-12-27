@@ -18,7 +18,8 @@ CRUD API Boilerplate
 - Minikube - Download and Install [Minikube](https://minikube.sigs.k8s.io/docs/start/)
 - Postman - Download and Install [Postman](https://www.postman.com/)
 
-
+# Diagram
+![alt text](https://blogger.googleusercontent.com/img/a/AVvXsEh7YGefgnENMB9Oo_9Wc0RI-G4Tj4mcmhTvG7qWXBZwquzgnE1qj3CNiI94RLUs_GOnTRpLQZZBZ2Dp8BvkhRKMB-sGPe6r98omc8gZ7VdDdSHgKYmo9KZ7lFAWBcFSdeSGSkGgkX66HPudJ0_SorXKQ6cIdQUa41LetLYTufJK2DZETy4T6SM-wVJKvw)
 
 # HowToUse
 
