@@ -24,3 +24,5 @@ spec:
           envFrom:
             - secretRef:
                 name: mysql-secret
+            - secretRef:
+                name: redis-secret

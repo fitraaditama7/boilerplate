@@ -20,4 +20,23 @@ run:
 download:
 	@go mod download
 
+deploy:
+	@kubectl apply -f kubernetes/mysql-db-pv.yaml
+	@kubectl apply -f kubernetes/mysql-db-pvc.yaml
+	@kubectl apply -f kubernetes/mysql-db-deployment.yaml
+	@kubectl apply -f kubernetes/mysql-db-service.yaml
+	@echo "Mysql Successfully Initialized"
+	@echo ""
+	@kubectl apply -f kubernetes/redis-pv.yaml
+	@kubectl apply -f kubernetes/redis-pvc.yaml
+	@kubectl apply -f kubernetes/redis-deployment.yaml
+	@kubectl apply -f kubernetes/redis-service.yaml
+	@echo "Redis Successfully Initialized"
+	@echo ""
+	@kubectl apply -f kubernetes/app-mysql-deployment.yaml
+	@kubectl apply -f kubernetes/app-mysql-service.yaml
+	@echo "App Successfully Initialized"
+	@echo ""
+
+
 .PHONY: clean download unittest test run lint-prepare lint

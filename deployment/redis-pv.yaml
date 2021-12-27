@@ -7,10 +7,11 @@ metadata:
     app: boilerplate-redis
 spec:
   storageClassName: manual
-  capacity: 1Gi
+  capacity: 
+    storage: 1Gi
   accessModes: 
     - ReadWriteMany
   hostPath:
     path: "/mnt/data"
-  persistentVolumeReclaimPolicy: retain
+  persistentVolumeReclaimPolicy: Retain
 
