@@ -1,8 +1,10 @@
-# iseng
+# Boilerplate Golang
 
 CRUD API Boilerplate
-
-[Installation](#installation)
+# Table of Contents
+- [Installation](#installation)
+- [How To Use](#howtouse)
+- [Credentials](#credentials)
 
 ## Installation
 
@@ -10,81 +12,70 @@ CRUD API Boilerplate
 - Golang(>=1.11) - Download and Install [Golang](https://golang.org/)
 - Redis - Download and Install [Redis](https://redis.io/download)
 - MySQL - Download and Install [MySQL](https://www.apachefriends.org/download.html)
+- Docker - Download and Install [Docker](https://www.docker.com/products/docker-desktop)
+- Kubectl - Download and Install [Kubectl](https://kubernetes.io/docs/tasks/tools/)
+- Virtualbox - Download and Install [Virtualbox](https://www.virtualbox.org/)
+- Minikube - Download and Install [Minikube](https://minikube.sigs.k8s.io/docs/start/)
+- Postman - Download and Install [Postman](https://www.postman.com/)
 
-### How To Use
-- Download Dependency Golang
 
-This command is useful for download dependency golang
+
+# HowToUse
+
+After all Prerequisites have been installed. you can follow the steps below
+- Run minikube
 ```
-    $ make download
+    $ minikube start
 ```
 
-This command is useful for migrate dummy data
+- Change directory to this repository
+```
+    $ cd path/of/boilerplate
+```
+
+- Create Secret for MySQL and Redis
+```
+    $ make create-secret
+```
+![alt text](https://blogger.googleusercontent.com/img/a/AVvXsEjJZ_zUrZhQlHeKe-t4R0l_t656StE1DzcJS4WzQqFVD9mgAe84L4jj4m2snf05Tx4qMuNMZiW3Jmeu0k0YnyY0jvt4tB47xxpiIkenk8WsS8XcgOqfOeefesYcIFk4BmbnmQGAHLwnpD0tcHuORxF2ixFo_xFy7VId2a2mu54nWP5Iuq6FPMy958yoGA)
+
+- Create deployment
+```
+    $ make deploy
+```
+![alt text](https://blogger.googleusercontent.com/img/a/AVvXsEhDc3HX98cgXN9rNKZeTQ4dzXdZcwcpxZS31_NG2iuGkZPZ4vIz4utMVs-OvTCVP7onATRGy0HYriYSJ69IbXFlLdVO1y7AaJ3MJUojvuE1FgqfTpYYH1U__KKaI8XJ3euIED0RVH_yFemrHc0ln2Z3NhCwVFeaemHqaqRNRONhVwyQrqlfzZP3up11IA)
+
+- Wait for all pods is running. you can check using this command and then copy pod with prefix `boilerplate-app-mysql-*`
+```
+    $ kubectl get pods
+```
+![alt text](https://blogger.googleusercontent.com/img/a/AVvXsEiZB7KxTfCuZKlI_0secwrxr3v8gqcm845dTYr-AVLKYKo91MiYOqGHve0w3EyMvn5CMaNlf3RbDnAIRZm8VwxLRU3mH7G__oDEiKShukZncMkOGKLp1IksMbUbUBt5Q5X3kdP8PluQEgu_7RTn1xiWseT9bS1C1rTkSlpb64e6JD3TkgPuDThL_xypFA)
+
+- After all pods are running. enter the pod with prefix `boilerplate-app-mysql-*` using this command
+```
+    $ kubectl exec --stdin --tty pod-name-change-this -- /bin/sh 
+```
+![alt text](https://blogger.googleusercontent.com/img/a/AVvXsEjLVkANLIUDK2WZE2JVch8cAaG77nOyHJqkbSeIst7IJ4FXF0IpWcVqQUMy5CfC-SPM88DvJkTtZjd9wAZqTUDvcdVEEBI-sHoiePTR6QXG5feikWtL_iCzFmlTudCOSeiLdXrII82fJlsfBgo6NCGEfG3_8z0caemYeizApth7Xlcpup6q3ys1ZQZ3HA)
+
+- Inside the pod running this command to populate table and data using this command and exit from pod
 ```
     $ make migrate
+    $ exit
 ```
+![alt text](https://blogger.googleusercontent.com/img/a/AVvXsEg5QTvRzvaABsmIei81mGBEwQ03ZWXVrSHPjA4h6Z5p7_2aWUtsBUdcAUrPBxK5L0eJYcgJstjv1N9HhFgtk_jGZWcTs7xjT9bjdBB-AtLvNQ-YtzP5i4EPFvNWVV7K1LK5qoOPz8Th0x0QR-DCo5zKK_T-FzxHDS4zV6wwEEH3kn3uk93YaFDr0-PWDQ)
 
-- Running Server
+- Get base url for app using this command
+```
+    $ minikube service boilerplate-app-mysql --url
+```
+![alt text](https://blogger.googleusercontent.com/img/a/AVvXsEjmgcNnqLtdejNT6Xoy1kbZVNPESRAuPI-og7PBwLz_PxxkPx1PEG5NxT8JTwCL-ch2xQ6xMjHe63ka8ESOOdTXFi8n4yHPSWW7cRBbQQAowrE6S_UNM-Ksy9MlUGGMSNbLw1Wjh-iUQ6f71CPjflJxVnqeNIodGNnlwiW2y8f29fJiO2XaWhLLyXo4Hg)
 
-This command is useful for running and generate swagger documentation
-```
-    $ make run
-```
-
-Curl for get list data
-```
-    $ curl --location --request GET 'localhost:4000/v1/dashboard/'
-```
-
-Curl for get detail data
-```
-    $ curl --location --request GET 'localhost:4000/v1/dashboard/dbe11835-0ae7-4d53-a6d7-f262d0b89603'
-```
-
-Curl for insert data
-```
-    $ curl --location --request PUT 'localhost:4000/v1/dashboard/dbe11835-0ae7-4d53-a6d7-f262d0b89603' \
-        --header 'Content-Type: application/json' \
-        --data-raw '{
-            "first_name": "Fitra",
-            "last_name": "Aditama",
-            "phone_number": "0812345569",
-            "email": "fitraaditama77@gmail.com",
-            "role_id": "admin",
-            "username": "fitraaditama77",
-            "password": "akuganteng",
-            "created_at": "fitra"
-        }'
-```
-
-Curl for update data
-```
-    $ curl --location --request PUT 'localhost:4000/v1/dashboard/dbe11835-0ae7-4d53-a6d7-f262d0b89603' \
-        --header 'Content-Type: application/json' \
-        --data-raw '{
-            "first_name": "Fitraa",
-            "last_name": "Aditama",
-            "phone_number": "0812345569",
-            "email": "fitraaditama77@gmail.com",
-            "role_id": "admin",
-            "username": "fitraaditama77",
-            "password": "akuganteng",
-            "updated_at": "fitra"
-}'
-```
-
-Curl for delete data
-```
-    $  curl --location --request DELETE 'localhost:4000/v1/dashboard/dbe11835-0ae7-4d53-a6d7-f262d0b89603' \
-        --header 'Content-Type: application/json' \
-        --data-raw '{
-            "deleted_at": "fitra"
-        }'
-```
-
-- Create Mock
-
-This Command is useful for creating mock file from interface{}
-```
-    $ mockery --name=InterfaceName --output=cmd/mocks  --recursive
-```
+- After base url is obtained. Open postman and import file `API User.postman_collection.json` and set global variable with name `localBaseURL`
+![alt text](https://blogger.googleusercontent.com/img/a/AVvXsEgxjoUbtXPx8EM7uMv1EGBnCi03mUMBClkNFKhOYJqaujkm9UXFBxC_vq8iSmCCfYZ95Sc8dn623jpLvuzuFKyCRBF06zlCS3PpltS0nJkEdAN6JzzgjG6EFy34-YUuSTiW8FeQndui-dXScdzD2MtW9cVL8JMkHH9YsUyGU-4hesxckmNOEkeCjjJumQ)
+![alt text](https://blogger.googleusercontent.com/img/a/AVvXsEhZ3y7_PIAWnfrwe11MbZ2O1YW_YsqiiPhQoqQ_1fnIn-3OcfBwm3Cdagum64vnoOrPDw-H3Aqq3g3C2Xt-YyhutyldVH-MYJCR1X9qvaqEySaCi7o_69U3yNcTehOsVHdT4FjwFweQtYoH3gDScRm86tzyxt7-Kh-SD-NdUhaHVGIUhjpl4MWm0qekfg)
+ 
+ # Credentials
+ |     Email      |  Password |
+|-------------|------:|
+|admin@mail.com| adminadmin |
+|user1@mail.com|useruser|
