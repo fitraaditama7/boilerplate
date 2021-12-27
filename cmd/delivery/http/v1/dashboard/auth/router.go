@@ -1,6 +1,7 @@
 package http
 
 import (
+	"arka/cmd/middleware"
 	"arka/cmd/service"
 	"arka/pkg/router"
 	"time"
@@ -9,14 +10,17 @@ import (
 var timeout = 5 * time.Second
 
 type authDashboard struct {
-	service service.AuthService
+	service    service.AuthService
+	middleware middleware.AuthMiddleware
 }
 
-func NewAuthDashboard(service service.AuthService) *authDashboard {
-	return &authDashboard{service}
+func NewAuthDashboard(service service.AuthService, middleware middleware.AuthMiddleware) *authDashboard {
+	return &authDashboard{service, middleware}
 }
 
 func (dashboard *authDashboard) Register(router *router.Router) {
-	// router.Use(middleware.RequiresAccessToken)
-	router.GET("/login", dashboard.Login)
+	authRouter := router.Group("/auth")
+	authRouter.POST("/login", dashboard.Login)
+	authRouter.Use(dashboard.middleware.RequiresAccessToken)
+	authRouter.POST("/logout", dashboard.Logout)
 }

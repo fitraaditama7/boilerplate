@@ -4,6 +4,7 @@ import (
 	"arka/cmd/entity"
 	"context"
 	"database/sql"
+	"time"
 
 	"github.com/sirupsen/logrus"
 )
@@ -212,11 +213,11 @@ func (m *MySQL) GetUserByEmailOrPhone(ctx context.Context, data string) (*entity
 		logrus.Error(err)
 		return nil, err
 	}
-
 	return &user, nil
 }
 
 func (m *MySQL) InsertUser(ctx context.Context, user *entity.User) (*entity.User, error) {
+	user.CreatedAt = time.Now()
 	query := `INSERT INTO tm_user
 		(
 			id,
@@ -262,6 +263,8 @@ func (m *MySQL) InsertUser(ctx context.Context, user *entity.User) (*entity.User
 
 func (m *MySQL) UpdateUser(ctx context.Context, user *entity.User, id string) (*entity.User, error) {
 
+	var now = time.Now()
+	user.UpdatedAt = &now
 	query := `UPDATE tm_user SET
 		username = ?,
 		email = ?,

@@ -2,11 +2,15 @@ package cmd
 
 import (
 	"arka/cmd/config"
+	dashboardAuth "arka/cmd/delivery/http/v1/dashboard/auth"
 	dashboardUser "arka/cmd/delivery/http/v1/dashboard/user"
+	"arka/cmd/middleware"
 	"arka/cmd/repositories"
 	"arka/cmd/repositories/user/mysql"
 	"arka/cmd/repositories/user/redis"
+	service "arka/cmd/service/auth"
 	serviceUser "arka/cmd/service/user"
+	"arka/pkg/auth"
 	"arka/pkg/cache"
 	"arka/pkg/database"
 	"arka/pkg/server"
@@ -47,8 +51,11 @@ func Run() {
 	logrus.Info("Success Initialize Redis")
 
 	// Auth
-	// authModule := auth.New(redisCommand)
-	// tokenModule := auth.NewToken()
+	authModule := auth.New(redisCommand)
+	tokenModule := auth.NewToken()
+
+	// middleware
+	middlewareModule := middleware.New(authModule)
 
 	// Casbin
 	// casbin := casbin.New(db)
@@ -59,7 +66,7 @@ func Run() {
 	authRepository = redis.NewUser(redisCommand, authRepository, config.RedisConfig.Prefix)
 
 	// Service
-	// var authService = service.NewAuthService(authRepository, authModule, tokenModule)
+	var authService = service.NewAuthService(authRepository, authModule, tokenModule)
 	var userService = serviceUser.NewUserService(authRepository)
 
 	// Server
@@ -68,8 +75,8 @@ func Run() {
 	// router
 	router := server.Router()
 	v1 := router.Group("/v1")
-	dashboardRouter := v1.Group("/dashboard")
-	dashboardUser.NewUserDashboard(userService).Register(dashboardRouter)
+	dashboardAuth.NewAuthDashboard(authService, middlewareModule).Register(v1)
+	dashboardUser.NewUserDashboard(userService, middlewareModule).Register(v1)
 
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)

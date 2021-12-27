@@ -7,7 +7,6 @@ import (
 	"arka/cmd/repositories"
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
@@ -25,7 +24,6 @@ func (s *userService) ListUser(ctx context.Context, page, limit int64) ([]*entit
 
 	users, err := s.userRepository.ListUser(ctx, page, limit)
 	if err == sql.ErrNoRows || users == nil {
-		fmt.Println("kesini")
 		return make([]*entity.User, 0), nil
 	} else if err != nil {
 		logrus.Error(err)
@@ -76,6 +74,7 @@ func (s *userService) UpdateUser(ctx context.Context, user *entity.User, id stri
 		logrus.Error(err)
 		return nil, err
 	}
+	user.Password = u.Password
 
 	user, err = s.userRepository.UpdateUser(ctx, user, id)
 	if err != nil {

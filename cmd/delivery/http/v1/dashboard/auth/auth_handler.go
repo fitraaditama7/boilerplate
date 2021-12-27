@@ -3,10 +3,12 @@ package http
 import (
 	"arka/cmd/lib/authentication"
 	"arka/cmd/lib/customError"
+	"arka/pkg/auth"
 	"arka/pkg/helper"
 	"arka/pkg/response"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/sirupsen/logrus"
@@ -52,4 +54,23 @@ func (dashboard *authDashboard) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response.Success(w, res)
+}
+
+func (dashboard *authDashboard) Logout(w http.ResponseWriter, r *http.Request) {
+	ctx, cancel := context.WithTimeout(r.Context(), timeout)
+	defer cancel()
+
+	accessDetail := auth.AccessDetails{
+		TokenUUID: r.Header.Get("token"),
+		UserID:    r.Header.Get("userId"),
+	}
+	fmt.Println(accessDetail.TokenUUID)
+	err := dashboard.service.Logout(ctx, &accessDetail)
+	if err != nil {
+		logrus.Error(err)
+		response.Error(w, customError.ErrInternalServerError)
+		return
+	}
+
+	response.Success(w, "SUCCESS")
 }

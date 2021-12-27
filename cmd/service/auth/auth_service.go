@@ -38,8 +38,8 @@ func (s *authService) Login(ctx context.Context, data string, password string) (
 		return nil, customError.ErrInternalServerError
 	}
 
-	ok := authentication.ComparePassword(password, user.Password)
-	if ok == false {
+	ok := authentication.ComparePassword(user.Password, password)
+	if !ok {
 		logrus.Error("password doesn't match")
 		return nil, customError.ErrInvalidLogin
 	}
@@ -62,4 +62,13 @@ func (s *authService) Login(ctx context.Context, data string, password string) (
 		Refresh: tokenDetail.RefreshToken,
 	}
 	return result, err
+}
+
+func (s *authService) Logout(ctx context.Context, accessDetail *auth.AccessDetails) error {
+	err := s.authorization.DeleteToken(accessDetail)
+	if err != nil {
+		logrus.Error(err)
+		return customError.ErrInternalServerError
+	}
+	return nil
 }

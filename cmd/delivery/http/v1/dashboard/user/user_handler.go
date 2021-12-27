@@ -14,6 +14,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+type contextKey string
+
 func (dashboard *userDashboard) ListUser(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), timeout)
 	defer cancel()
@@ -76,6 +78,8 @@ func (dashboard *userDashboard) InserUser(w http.ResponseWriter, r *http.Request
 	decoder := json.NewDecoder(r.Body)
 	decoder.Decode(&params)
 
+	params.CreatedBy = r.Header.Get("userId")
+
 	err := helper.Validate(params)
 	if err != nil {
 		logrus.Error(err)
@@ -115,6 +119,7 @@ func (dashboard *userDashboard) UpdateUser(w http.ResponseWriter, r *http.Reques
 	decoder := json.NewDecoder(r.Body)
 	decoder.Decode(&params)
 
+	params.UpdatedBy = r.Header.Get("userId")
 	err := helper.Validate(params)
 	if err != nil {
 		logrus.Error(err)
@@ -152,6 +157,8 @@ func (dashboard *userDashboard) DeleteUser(w http.ResponseWriter, r *http.Reques
 
 	decoder := json.NewDecoder(r.Body)
 	decoder.Decode(&params)
+
+	params.DeletedBy = r.Header.Get("userId")
 
 	err := helper.Validate(params)
 	if err != nil {

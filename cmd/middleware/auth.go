@@ -1,70 +1,114 @@
 package middleware
 
 import (
+	"arka/cmd/entity"
 	"arka/cmd/lib/customError"
 	"arka/pkg/auth"
-	"arka/pkg/casbin"
 	"arka/pkg/response"
+	"arka/pkg/router"
 	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"log"
 	"net/http"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 )
 
 type contextKey string
+type AuthMiddleware interface {
+	RequiresAccessToken(next http.Handler) http.Handler
+}
+
+type authMidlleware struct {
+	authModule auth.Auth
+}
+
+func New(authModule auth.Auth) *authMidlleware {
+	return &authMidlleware{authModule: authModule}
+}
 
 func (c contextKey) String() string {
 	return "myPackage context key " + string(c)
 }
 
-func RequiresAccessToken(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+func (a *authMidlleware) RequiresAccessToken(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		err := auth.TokenValid(r)
 		if err != nil {
 			logrus.Error(err)
 			response.Error(w, err)
 			return
 		}
+
 		claims, err := auth.ExtractTokenMetadata(r)
 		if err != nil {
 			logrus.Error(err)
 			response.Error(w, err)
+			return
+		}
+		fmt.Println(claims.TokenUUID)
+		userID, err := a.authModule.FetchAuth(claims.TokenUUID)
+		if err != nil {
+			logrus.Error(err)
+			response.Error(w, customError.ErrInternalServerError)
+			return
+		}
+
+		id := router.Param(r.Context(), "id")
+
+		if id != "" && claims.RoleID != "admin" && id != claims.UserID {
+			response.Error(w, customError.ErrNotAuthorize)
+			return
+		}
+
+		r.Header.Add("userId", userID)
+		r.Header.Add("token", claims.TokenUUID)
+
+		if r.Method == "PUT" {
+			var user entity.User
+			decoder := json.NewDecoder(r.Body)
+			decoder.Decode(&user)
+
+			if claims.RoleID != "admin" {
+				user.RoleID = "user"
+			}
+
+			b, err := json.Marshal(user)
+			if err != nil {
+				log.Println(err)
+				response.Error(w, customError.ErrInvalidBodyRequest)
+				return
+			}
+			r.Body = io.NopCloser(strings.NewReader(string(b)))
 		}
 		contextClaims := contextKey("claims")
 		ctx := context.WithValue(r.Context(), contextClaims, claims)
 		next.ServeHTTP(w, r.WithContext(ctx))
-	}
+	})
 }
 
 func RequiresAuthorization(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		contextClaims := contextKey("claims")
 		value := r.Context().Value(contextClaims).(*auth.AccessDetails)
 		roleID := value.RoleID
 
-		ok, err := casbin.CheckPolicy(&casbin.RoleData{
-			Role:   roleID,
-			Path:   r.URL.Path,
-			Method: r.Method,
-		})
-		if err != nil {
-			logrus.Error(err)
-			response.Error(w, err)
-			return
-		}
-
-		if ok {
-			next.ServeHTTP(w, r)
-		} else {
+		if roleID != "admin" {
 			logrus.Error(customError.ErrNotAuthorize.Detail)
 			response.Error(w, customError.ErrNotAuthorize)
 			return
 		}
-	}
+
+		next.ServeHTTP(w, r)
+
+	})
 }
 
-func RequiresCORS(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+func RequiresCORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Access-Control-Allow-Origin", "*")
 		w.Header().Add("Access-Control-Allow-Credentials", "true")
 		w.Header().Add("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Request-With")
@@ -76,5 +120,5 @@ func RequiresCORS(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		next.ServeHTTP(w, r)
-	}
+	})
 }

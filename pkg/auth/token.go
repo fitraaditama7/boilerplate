@@ -120,7 +120,7 @@ func extract(token *jwt.Token) (*AccessDetails, error) {
 		accessUUID, ok := claims["access_uuid"].(string)
 		userID, userOK := claims["user_id"].(string)
 		roleID, roleOK := claims["role_id"].(string)
-		if ok == false || userOK == false || roleOK == false {
+		if !ok || !userOK || !roleOK {
 			logrus.Error(customError.ErrNotAuthorize.Detail)
 			return nil, customError.ErrNotAuthorize
 		}

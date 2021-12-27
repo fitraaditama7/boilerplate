@@ -3,6 +3,9 @@ package casbin
 import (
 	"arka/cmd/lib/customError"
 	"database/sql"
+	"encoding/json"
+	"log"
+	"os"
 
 	sqladapter "github.com/Blank-Xu/sql-adapter"
 	"github.com/sirupsen/logrus"
@@ -13,9 +16,9 @@ import (
 var enforcer *casbin.Enforcer
 
 type RoleData struct {
-	Role   string
-	Path   string
-	Method string
+	Role   string `json:"role"`
+	Path   string `json:"path"`
+	Method string `json:"method"`
 }
 
 type CasbinConfig struct {
@@ -27,6 +30,7 @@ func New(db *sql.DB) *CasbinConfig {
 }
 
 func (c *CasbinConfig) Register() error {
+	var role []*RoleData
 	adapter, err := sqladapter.NewAdapter(c.db, "mysql", "casbin_rule")
 	if err != nil {
 		logrus.Error(err)
@@ -42,6 +46,25 @@ func (c *CasbinConfig) Register() error {
 	if err = enforcer.LoadPolicy(); err != nil {
 		logrus.Error(err)
 		return err
+	}
+
+	data, err := os.ReadFile("cmd/config/casbin.json")
+	if err != nil {
+		logrus.Error(err)
+		return err
+	}
+
+	err = json.Unmarshal(data, &role)
+	if err != nil {
+		logrus.Error(err)
+		return err
+	}
+
+	for _, value := range role {
+		err = InsertPolicy(value)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 
 	return nil

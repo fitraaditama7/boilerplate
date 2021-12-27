@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"arka/cmd/lib/customError"
 	"arka/pkg/cache"
 	"fmt"
 	"time"
@@ -65,7 +66,10 @@ func (s *service) FetchAuth(tokenUUID string) (string, error) {
 		logrus.Error(err)
 		return "", err
 	}
-
+	if string(userID) == "" {
+		logrus.Error(customError.ErrDataNotFound)
+		return "", customError.ErrToken
+	}
 	return string(userID), nil
 }
 

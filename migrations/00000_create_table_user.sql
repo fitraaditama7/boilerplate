@@ -7,7 +7,7 @@ create table IF NOT EXISTS tm_user
     first_name   varchar(255)                          not null,
     last_name    varchar(255)                          null,
     phone_number varchar(255)                          null,
-    role_id      varchar(255)                          null,
+    role_id      varchar(255)                          not null,
     created_at   timestamp default current_timestamp() not null on update current_timestamp(),
     created_by   varchar(255)                          null,
     updated_at   timestamp                             null,
