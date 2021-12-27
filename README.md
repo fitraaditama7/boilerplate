@@ -73,6 +73,9 @@ After all Prerequisites have been installed. you can follow the steps below
 - After base url is obtained. Open postman and import file `API User.postman_collection.json` and set global variable with name `localBaseURL`
 ![alt text](https://blogger.googleusercontent.com/img/a/AVvXsEgxjoUbtXPx8EM7uMv1EGBnCi03mUMBClkNFKhOYJqaujkm9UXFBxC_vq8iSmCCfYZ95Sc8dn623jpLvuzuFKyCRBF06zlCS3PpltS0nJkEdAN6JzzgjG6EFy34-YUuSTiW8FeQndui-dXScdzD2MtW9cVL8JMkHH9YsUyGU-4hesxckmNOEkeCjjJumQ)
 ![alt text](https://blogger.googleusercontent.com/img/a/AVvXsEhZ3y7_PIAWnfrwe11MbZ2O1YW_YsqiiPhQoqQ_1fnIn-3OcfBwm3Cdagum64vnoOrPDw-H3Aqq3g3C2Xt-YyhutyldVH-MYJCR1X9qvaqEySaCi7o_69U3yNcTehOsVHdT4FjwFweQtYoH3gDScRm86tzyxt7-Kh-SD-NdUhaHVGIUhjpl4MWm0qekfg)
+
+- Login to application using api login and save token then create global variable with name `authToken`. after that you can access another endpoint that need token.
+![alt text](https://blogger.googleusercontent.com/img/a/AVvXsEiZdNISo0Na-BT7qVz1Rwa-fb-hyAatIrEN7m5fHab-nP16XGTmnnOlCzHVjndG-nY7NtWvX-YJhD9aWXkkBBJx-18a6s0k9iQ1FgIV0SCXUNwJ5sj_YZt1vDocUy4lvZIvOBJlo3oenGVj-XEGL_mVANb3QCjWi023PYDJQVC_yX5uIIOhiPwH4FHlQA)
  
  # Credentials
  |     Email      |  Password |
