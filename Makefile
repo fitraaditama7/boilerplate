@@ -20,21 +20,26 @@ run:
 download:
 	@go mod download
 
+create-secret:
+	@kubectl apply -f deployment/mysql-secret.yaml
+	@kubectl apply -f deployment/redis-secret.yaml
+
+
 deploy:
-	@kubectl apply -f kubernetes/mysql-db-pv.yaml
-	@kubectl apply -f kubernetes/mysql-db-pvc.yaml
-	@kubectl apply -f kubernetes/mysql-db-deployment.yaml
-	@kubectl apply -f kubernetes/mysql-db-service.yaml
+	@kubectl apply -f deployment/mysql-db-pv.yaml
+	@kubectl apply -f deployment/mysql-db-pvc.yaml
+	@kubectl apply -f deployment/mysql-db-deployment.yaml
+	@kubectl apply -f deployment/mysql-db-service.yaml
 	@echo "Mysql Successfully Initialized"
 	@echo ""
-	@kubectl apply -f kubernetes/redis-pv.yaml
-	@kubectl apply -f kubernetes/redis-pvc.yaml
-	@kubectl apply -f kubernetes/redis-deployment.yaml
-	@kubectl apply -f kubernetes/redis-service.yaml
+	@kubectl apply -f deployment/redis-pv.yaml
+	@kubectl apply -f deployment/redis-pvc.yaml
+	@kubectl apply -f deployment/redis-deployment.yaml
+	@kubectl apply -f deployment/redis-service.yaml
 	@echo "Redis Successfully Initialized"
 	@echo ""
-	@kubectl apply -f kubernetes/app-mysql-deployment.yaml
-	@kubectl apply -f kubernetes/app-mysql-service.yaml
+	@kubectl apply -f deployment/app-mysql-deployment.yaml
+	@kubectl apply -f deployment/app-mysql-service.yaml
 	@echo "App Successfully Initialized"
 	@echo ""
 

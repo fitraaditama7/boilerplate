@@ -24,6 +24,6 @@ func (dashboard *userDashboard) Register(router *router.Router) {
 	userRouter.GET("/", middleware.RequiresAuthorization(dashboard.ListUser))
 	userRouter.GET("/:id", dashboard.GetUserByID)
 	userRouter.POST("/", middleware.RequiresAuthorization(dashboard.InserUser))
-	userRouter.PUT("/:id", dashboard.UpdateUser)
+	userRouter.PUT("/:id", middleware.RequiresAuthorization(dashboard.UpdateUser))
 	userRouter.DELETE("/:id", middleware.RequiresAuthorization(dashboard.DeleteUser))
 }
