@@ -59,7 +59,7 @@ After all Prerequisites have been installed. you can follow the steps below
 
 - Inside the pod running this command to populate table and data using this command and exit from pod
 ```
-    $ make migrate
+    $ go run migrations/migrate.go
     $ exit
 ```
 ![alt text](https://blogger.googleusercontent.com/img/a/AVvXsEg5QTvRzvaABsmIei81mGBEwQ03ZWXVrSHPjA4h6Z5p7_2aWUtsBUdcAUrPBxK5L0eJYcgJstjv1N9HhFgtk_jGZWcTs7xjT9bjdBB-AtLvNQ-YtzP5i4EPFvNWVV7K1LK5qoOPz8Th0x0QR-DCo5zKK_T-FzxHDS4zV6wwEEH3kn3uk93YaFDr0-PWDQ)
