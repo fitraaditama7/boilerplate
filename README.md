@@ -76,7 +76,7 @@ After all Prerequisites have been installed. you can follow the steps below
 ![alt text](https://blogger.googleusercontent.com/img/a/AVvXsEhZ3y7_PIAWnfrwe11MbZ2O1YW_YsqiiPhQoqQ_1fnIn-3OcfBwm3Cdagum64vnoOrPDw-H3Aqq3g3C2Xt-YyhutyldVH-MYJCR1X9qvaqEySaCi7o_69U3yNcTehOsVHdT4FjwFweQtYoH3gDScRm86tzyxt7-Kh-SD-NdUhaHVGIUhjpl4MWm0qekfg)
 
 - Login to application using api login and save token then create global variable with name `authToken`. after that you can access another endpoint that need token.
-![alt text](https://im6.ezgif.com/tmp/ezgif-6-b849c5103e.gif)
+![alt text](https://blogger.googleusercontent.com/img/a/AVvXsEjKggE2zDBH-H7RoLmDjRvgZeKCzEdD43CkHI4NahrEOirQiM4pUOgQ0jrpSKfT8WAQJTdz3Bf8VdYJiVyC51u3R313thTG6xYeKq9-VKdF2s1vAE3KgToL-kKRu_7XymhVMrT1KrFVqkSAw0wYOozhKe30tLjYTXvpz0ux_wdAvvm6HUBKS1ABJ9uJjw)
  
  # Credentials
  |     Email      |  Password |
