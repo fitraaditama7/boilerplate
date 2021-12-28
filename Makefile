@@ -25,22 +25,19 @@ create-secret:
 	@kubectl apply -f deployment/redis-secret.yaml
 
 
-deploy-mysql:
+deploy:
 	@kubectl apply -f deployment/mysql-db-pv.yaml
 	@kubectl apply -f deployment/mysql-db-pvc.yaml
 	@kubectl apply -f deployment/mysql-db-deployment.yaml
 	@kubectl apply -f deployment/mysql-db-service.yaml
 	@echo "Mysql Successfully Initialized"
 	@echo ""
-deploy-redis:
-	
 	@kubectl apply -f deployment/redis-pv.yaml
 	@kubectl apply -f deployment/redis-pvc.yaml
 	@kubectl apply -f deployment/redis-deployment.yaml
 	@kubectl apply -f deployment/redis-service.yaml
 	@echo "Redis Successfully Initialized"
 	@echo ""
-deploy-app:
 	@kubectl apply -f deployment/app-mysql-deployment.yaml
 	@kubectl apply -f deployment/app-mysql-service.yaml
 	@echo "App Successfully Initialized"
