@@ -74,6 +74,11 @@ func Run() {
 
 	// router
 	router := server.Router()
+
+	// add CORS
+	router.Use(middleware.RequiresCORS)
+
+	// Handler
 	v1 := router.Group("/v1")
 	dashboardAuth.NewAuthDashboard(authService, middlewareModule).Register(v1)
 	dashboardUser.NewUserDashboard(userService, middlewareModule).Register(v1)
