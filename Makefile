@@ -28,6 +28,12 @@ build:
 clean:
 	if [ -f ${BINARY} ] ; then rm ${BINARY} ; fi
 
+migrateup:
+	@go run migrations/migrate.go up 
+
+migratedown:
+	@go run migrations/migrate.go down 
+
 create-secret:
 	@kubectl apply -f deployment/mysql-secret.yaml
 	@kubectl apply -f deployment/redis-secret.yaml

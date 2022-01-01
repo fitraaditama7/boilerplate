@@ -2,56 +2,62 @@ package main
 
 import (
 	"arka/cmd/config"
-	"arka/pkg/database"
-	"io/ioutil"
-	"log"
+	"fmt"
 	"os"
+	"os/exec"
 
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
 )
 
-func main() {
-	Migrate()
+var rootCmd = &cobra.Command{
+	Use:   "migration",
+	Short: "add migration",
+	Long:  `add migration to database`,
 }
 
-func Migrate() {
-	config := config.LoadConfig()
-	db, err := database.InitDB(config.DBConfig)
+var upCmd = &cobra.Command{
+	Use:   "up",
+	Short: "up migration",
+	Long:  "up migration to database",
+	Run: func(cmd *cobra.Command, args []string) {
+		migrate("up")
+	},
+}
+var downCmd = &cobra.Command{
+	Use:   "down",
+	Short: "down migration",
+	Long:  "down migration to database",
+	Run: func(cmd *cobra.Command, args []string) {
+		migrate("down")
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(downCmd)
+	rootCmd.AddCommand(upCmd)
+}
+
+func main() {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+}
+
+func migrate(command string) {
+	var cmd *exec.Cmd
+	var config = config.LoadConfig()
+	var dsn = fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true", config.DBConfig.Username, config.DBConfig.Password, config.DBConfig.Host, config.DBConfig.Port, config.DBConfig.Name)
+
+	if command == "down" {
+		cmd = exec.Command("migrate", "-path", "migrations", "-database", fmt.Sprintf("mysql://%s", dsn), "-verbose", command, "-all")
+	} else {
+		cmd = exec.Command("migrate", "-path", "migrations", "-database", fmt.Sprintf("mysql://%s", dsn), "-verbose", command)
+	}
+
+	err := cmd.Run()
 	if err != nil {
 		logrus.Error(err)
-	}
-
-	file, err := os.Open("./migrations/00000_create_table_user.sql")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	b, err := ioutil.ReadAll(file)
-	if err != nil {
-		panic(err)
-	}
-
-	// Create Database
-	_, err = db.Exec(string(b))
-	if err != nil {
-		panic(err)
-	}
-
-	file, err = os.Open("./migrations/00001_populate_data_table_user.sql")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	b, err = ioutil.ReadAll(file)
-	if err != nil {
-		panic(err)
-	}
-
-	// Create Database
-	_, err = db.Exec(string(b))
-	if err != nil {
-		panic(err)
 	}
 }
